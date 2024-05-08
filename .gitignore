@@ -1,0 +1,11 @@
+Design.txt
+.env
+db.sqlite3
+__pycache__
+try.py
+public
+access.log
+error.log
+mongodb-shell-cheat-list.txt
+ec2-roar-interview.pem
+docker-cheat-list.txt

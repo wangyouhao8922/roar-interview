@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  django:
+    build: 
+      context: ./roar_interview
+      # define directory for dockerfile to access.
+    container_name: django-c
+    image: django:1.0
+    ports:
+      - '8080:80'
+    # volumes: 
+    #    - ./roar_interview:/var/www/roar_interview/ # for development
+    #    - ./roar_interview/000-default.conf:/etc/apache2/sites-available/000-default.conf # for development
+    environment:
+      - TZ=Asia/Taipei
+    networks:
+      - django-n
+    depends_on:
+      - mongodb
+  mongodb:
+    image: mongodb/mongodb-community-server:latest
+    container_name: mongodb
+    ports:
+      - '27017:27017'
+    environment:
+      - TZ=Asia/Taipei
+    networks:
+      - django-n
+networks:
+  django-n:
+    driver: bridge
+
+        

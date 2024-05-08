@@ -1,0 +1,52 @@
+1. Purpose:
+This project is for Roar interview. A Django server with three features. First, to fetch data from data.gov.tw and store it to MongoDB. Second, view, delete and update data stored in sqlite3. Third, provide an Api for data in sqlite3.
+
+2. Frontend and API:
+API(get): 13.236.71.106/shows
+Frontend: 13.236.71.106/admin 
+
+3. To connect to AWS EC2:
+chmod 0400 ec2-roar-interview.pem
+ssh -i ec2-roar-interview.pem ec2-user@13.236.71.106
+
+4. Directory structure:
+/roar_interview 
+    Django project directory
+    /fetch_api
+        Django app for fetch data from data.gov.tw then store to MongoDB.
+    /logs
+        Server logs.
+    /public
+        Static file for web page.
+    /roar_interview
+        Django main app.
+    /shows
+        Django app for storing shows in sqlite3.
+/sqlite3-setup
+    Not used.
+
+5. Packages:
+Django:
+    Web server.
+requests:
+    For sending requests to data.gov.tw API.
+pymongo:
+    For manipulating MongoDB.
+
+6. Database design(normalization):
+Shows:
+    - Doesn't contain showInfo and units(masterUnit, subUnit, supportUnit and otherUnit), the rest don't violates 3NF.
+    - Columns: Version, ShowID(PK), UID, Title, Category, ShowUnit, DiscountInfo, DescriptionFilterHtml, ImageUrl, WebSales, SourceWebPromote, Comment, EditModifyDate, SourceWebName, StartDate, EndDate, HitRate
+ShowInfos: 
+    - Since showInfo in show contain repeating group of data items on a single row(show) violates 1NF therefore split showInfo into another table ShowInfos.
+    - Columns: ShowInfoID(PK), ShowID(FK), Time, LocationID(FK), OnSales, Price, EndTime
+Locations:
+    - Since location in showInfo contain repeating group of data items on a single row(showInfo) violates 1NF therefore split location into another table Locations.
+    - Columns: LocationID(PK), Address, Name, Latitude, Longitude
+Units:
+    - Since units in show contain repeating group of data items on a single row(show) violates 1NF therefore split units into another table Units.
+    - Columns: UnitID(PK), Name
+ShowUnitRoles:
+    - In order to keep relationship between Units and Shows, ShowUnitRoles is needed.
+    - ShowUnitRoleID(PK), ShowID(FK), UnitID(FK), Role
+
